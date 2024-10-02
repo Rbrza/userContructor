@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct User {
-    char * Name;
-    char * LastName;
-    char * Email;
+    char Name[50];
+    char LastName[50];
+    char Email[100];
     int Age;
 };
 
@@ -14,14 +15,13 @@ struct userList {
     int capacityOfArray;
 };
 
-int writeUserInfoFromArray(struct userList *users) {
+void writeUserInfoFromArray(struct userList *users) {
     for (int i = 0; i < users->numberOfUsersInArray; i++) {
         printf("Name: %s\n", users->usersList[i].Name);
         printf("LastName: %s\n", users->usersList[i].LastName);
         printf("Email: %s\n", users->usersList[i].Email);
         printf("Age: %d\n", users->usersList[i].Age);
     }
-    return 0;
 }
 
 struct userList createUserList(int size) {
@@ -76,15 +76,15 @@ struct User questionnareToGenerateUser() {
 
     printf("Enter Name : ");
     scanf("%s", name);
-    user.Name = name;
+    strcpy(user.Name, name);
 
     printf("Enter Last Name : ");
     scanf("%s", lastName);
-    user.LastName = lastName;
+    strcpy(user.LastName, lastName);
 
     printf("Enter Email : ");
     scanf("%s", email);
-    user.Email = email;
+    strcpy(user.Email, email);
 
     printf("Enter Age : ");
     scanf("%d", &user.Age);
