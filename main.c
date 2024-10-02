@@ -8,23 +8,6 @@ struct User {
     int Age;
 };
 
-struct User createUser(char * Name, char * LastName, char * Email, int Age) {
-    struct User user;
-    user.Name = Name;
-    user.LastName = LastName;
-    user.Email = Email;
-    user.Age = Age;
-    return user;
-}
-
-int printUserInfo(struct User user) {
-    printf("Name: %s\n", user.Name);
-    printf("LastName: %s\n", user.LastName);
-    printf("Email: %s\n", user.Email);
-    printf("Age: %d\n", user.Age);
-    return 0;
-}
-
 struct userList {
     struct User * usersList;
     int numberOfUsersInArray;
@@ -33,7 +16,10 @@ struct userList {
 
 int writeUserInfoFromArray(struct userList *users) {
     for (int i = 0; i < users->numberOfUsersInArray; i++) {
-        printUserInfo(users->usersList[i]);
+        printf("Name: %s\n", users->usersList[i].Name);
+        printf("LastName: %s\n", users->usersList[i].LastName);
+        printf("Email: %s\n", users->usersList[i].Email);
+        printf("Age: %d\n", users->usersList[i].Age);
     }
     return 0;
 }
@@ -61,21 +47,80 @@ void addUserToList(struct userList * users, struct User user) {
 
 void deleteUserFromList(struct userList * users, struct User user) {
     if (users->numberOfUsersInArray > 0) {
+        int koeficient = 0;
+        for (int i = 0; i < users->numberOfUsersInArray - 1; ++i) {
+            if (users->usersList[i].Name == user.Name && users->usersList[i].LastName == user.LastName && users->usersList[i].Email == user.Email && users->usersList[i].Age == user.Age) {
+                free(users->usersList[i].Name);
+                free(users->usersList[i].LastName);
+                free(users->usersList[i].Email);
+                koeficient ++;
+            }
+            else {
+                users->usersList[i] = users->usersList[i + koeficient];
+            }
+        }
+        users->numberOfUsersInArray --;
+        users->usersList = realloc(users->usersList, sizeof(struct User) * users->numberOfUsersInArray);
+        users->capacityOfArray--;
+    }
+    else {
+        printf("Error: User list is empty\n");
+    }
+}
 
+struct User questionnareToGenerateUser() {
+    struct User user;
+    char name[50];
+    char lastName[50];
+    char email[100];
+
+    printf("Enter Name : ");
+    scanf("%s", name);
+    user.Name = name;
+
+    printf("Enter Last Name : ");
+    scanf("%s", lastName);
+    user.LastName = lastName;
+
+    printf("Enter Email : ");
+    scanf("%s", email);
+    user.Email = email;
+
+    printf("Enter Age : ");
+    scanf("%d", &user.Age);
+
+    return user;
 }
 
 int main(void) {
-    struct userList users = createUserList(10);
-    struct User user = createUser("John", "Doe", "Smith", 180);
-    struct User user2 = createUser("Marry", "Long", "Hamburbur", 45);
-    printUserInfo(user);
-    users.usersList[0] = user;
-    users.usersList[1] = user2;
-    /*
-    printf("Size of array: %llu\n",sizeof*(users)); //Furt stejný size i když smažu user2 z pole
-    printf("First name: %s\n",(users + 1)->Name); // Nepotřebuju * a jestli jí tam dám tak musí tam být i &. Když ne * tak nic??
-    */
-    writeUserInfoFromArray(&users);
-    free(users.usersList);
-    return 0;
+    struct userList users = createUserList(30);
+    while (true) {
+        printf("1. Add User\n");
+        printf("2. Delete User\n");
+        printf("3. Write all users in array\n");
+        printf("4. Exit\n");
+        int choice;
+        scanf("%d", &choice);
+        struct User user;
+        switch (choice) {
+            case 1:
+                user = questionnareToGenerateUser();
+
+                addUserToList(&users, user);
+            break;
+            case 2:
+                user = questionnareToGenerateUser();
+                deleteUserFromList(&users, user);
+            break;
+            case 3:
+                writeUserInfoFromArray(&users);
+            break;
+            case 4:
+                printf("Exit\n");
+            free(users.usersList);
+            return 0;
+            default:
+                printf("Invalid choice\n");
+        }
+    }
 }
