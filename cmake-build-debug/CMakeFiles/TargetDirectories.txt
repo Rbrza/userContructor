@@ -1,0 +1,3 @@
+C:/Users/rbrza/CLionProjects/userContructor/cmake-build-debug/CMakeFiles/userContructor.dir
+C:/Users/rbrza/CLionProjects/userContructor/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/rbrza/CLionProjects/userContructor/cmake-build-debug/CMakeFiles/rebuild_cache.dir
